@@ -36,17 +36,17 @@ public class EventController {
     }
 
     @RequestMapping(value = "Events/{id}", method = RequestMethod.PUT)
-    public Event update(@PathVariable Long id, @RequestBody Event character) {
-        Event existingCharacter = eventRepository.findOne(id);
-        BeanUtils.copyProperties(character, existingCharacter);
+    public Event update(@PathVariable Long id, @RequestBody Event event) {
+        Event existingEvent = eventRepository.findOne(id);
+        BeanUtils.copyProperties(event, existingEvent);
         
-        return eventRepository.saveAndFlush(existingCharacter);
+        return eventRepository.saveAndFlush(existingEvent);
     }
 
     @RequestMapping(value = "Events/{id}", method = RequestMethod.DELETE)
     public Event delete(@PathVariable Long id) {
-        Event existingCharacter = eventRepository.findOne(id);
-        eventRepository.delete(existingCharacter);
-        return existingCharacter;
+        Event existingEvent = eventRepository.findOne(id);
+        eventRepository.delete(existingEvent);
+        return existingEvent;
     }
 }

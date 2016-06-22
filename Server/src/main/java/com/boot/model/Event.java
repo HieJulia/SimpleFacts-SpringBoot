@@ -3,44 +3,39 @@ package com.boot.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "Events")
 public class Event implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long ID;
-    
-    @Column(name="Name", nullable = false)
-    private String Name = "Failed Experiment";
-    
-    @Column(name="Backstory", nullable = false)
-    private String Backstory = "Great men thankfully did not waste any ink on this worthless cretin.";
-    
-    @Column(name="ImageURL", nullable = false)
-    private String ImageURL = "http://sunfieldfarm.org/wp-content/uploads/2014/02/profile-placeholder.png";
-    
-    @Column(name="ms", nullable = false)
-    private Long ms = 0L;
-    
-    @Column(name="FulfilledLifePurpose", nullable = false)
-    private boolean FulfilledLifePurpose = false;
-    
+
+    @Column(name = "Name", nullable = false)
+    private String Name;
+
+    @Column(name = "Time", nullable = false)
+    private String Time;
+
+    private Location location;
 
     public Event() {
     }
 
-    public Event(Long ID, String Name, String Backstory, String ImageURL, Long ms, boolean FulfilledLifePurpose) {
+    public Event(Long ID, String Name, String Time, Location location) {
         this.setID(ID);
         this.setName(Name);
-        this.setBackstory(Backstory);
-        this.setImageURL(ImageURL);
-        this.setms(ms);
-        this.setFulfilledLifePurpose(FulfilledLifePurpose);
+        this.setTime(Time);
+        this.location = location;
     }
 
     public Long getID() {
@@ -59,35 +54,28 @@ public class Event implements Serializable {
         this.Name = Name;
     }
 
-    public String getBackstory() {
-        return this.Backstory;
+    public String getTime() {
+        return this.Time;
     }
 
-    public final void setBackstory(String Backstory) {
-        this.Backstory = Backstory;
+    public final void setTime(String Time) {
+        this.Time = Time;
     }
 
-    public String getImageURL() {
-        return this.ImageURL;
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "ID", unique = true, nullable = false)
+    public Long getRecordId() {
+        return this.ID;
     }
 
-    public final void setImageURL(String ImageURL) {
-        this.ImageURL = ImageURL;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID", nullable = false)
+    public Location getLocation() {
+            return this.location;
     }
 
-    public Long getms() {
-        return this.ms;
-    }
-
-    public final void setms(Long ms) {
-        this.ms = ms;
-    }
-
-    public boolean getFulfilledLifePurpose() {
-        return this.FulfilledLifePurpose;
-    }
-
-    public final void setFulfilledLifePurpose(boolean FulfilledLifePurpose) {
-        this.FulfilledLifePurpose = FulfilledLifePurpose;
+    public void setStock(Location location) {
+            this.location = location;
     }
 }
