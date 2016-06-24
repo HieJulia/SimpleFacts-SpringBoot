@@ -4,16 +4,18 @@
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
-	<session-factory>
-	 	<property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mariadb://localhost/events</property>
-		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password"></property>
-                <property name="hibernate.hbm2ddl.auto">create-drop</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="show_sql">true</property>
-		<property name="format_sql">true</property>
-		<mapping class="com.boot.model.Event" />
-		<mapping class="com.boot.model.Location" />
-	</session-factory>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mariadb://localhost/events</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
+        <!-- Adds backtick before column names when generating the mysql query... It doesnt seem to add backticks to every column name though.-->
+        <property name="hibernate.globally_quoted_identifiers">true</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <mapping class="com.boot.model.Event" />
+        <mapping class="com.boot.model.Location" />
+    </session-factory>
 </hibernate-configuration>
