@@ -1,5 +1,6 @@
 package com.boot.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +33,7 @@ public class Location implements Serializable {
     private Double Lat;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "location")
+    @JsonManagedReference
     private Set<Event> Events = new HashSet<Event>(0);
 
     public Location() {

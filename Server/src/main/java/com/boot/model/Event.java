@@ -1,5 +1,6 @@
 package com.boot.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +29,7 @@ public class Event implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LocationID", nullable = false)
+    @JsonBackReference
     private Location location;
 
     public Event() {

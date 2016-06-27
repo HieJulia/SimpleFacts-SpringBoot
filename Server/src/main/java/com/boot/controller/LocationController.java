@@ -1,5 +1,6 @@
 package com.boot.controller;
 
+import com.boot.model.Event;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.boot.model.Location;
 import com.boot.repository.LocationRepository;
+import com.boot.util.HibernateUtil;
+import org.hibernate.Session;
 
 @RestController
 @RequestMapping("api/v1/")
@@ -19,6 +22,33 @@ public class LocationController {
     
     @Autowired
     private LocationRepository locationRepository;
+    
+    @RequestMapping(value = "Create", method = RequestMethod.GET)
+    public void create() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        session.beginTransaction();
+
+        Location location = new Location();
+        
+        location.setName("bob");
+        location.setLat(1d);
+        location.setLong(2d);
+        
+        session.save(location);
+        
+        Event event = new Event();
+        event.setName("oinks");
+        event.setTime("11:55:22.000");
+        event.setLocation(location);
+        
+        location.getEvents().add(event);
+
+        session.save(event);
+
+        session.getTransaction().commit();
+        System.out.println("Done");
+    }
 
     @RequestMapping(value = "Locations", method = RequestMethod.GET)
     public List<Location> list() {
