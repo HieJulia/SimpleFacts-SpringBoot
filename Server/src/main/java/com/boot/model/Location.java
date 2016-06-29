@@ -34,7 +34,7 @@ public class Location implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "location")
     @JsonManagedReference
-    private Set<Event> Events = new HashSet<Event>(0);
+    private Set<Event> events = new HashSet<Event>(0);
 
     public Location() {
     }
@@ -87,10 +87,10 @@ public class Location implements Serializable {
     }
     
     public Set<Event> getEvents() {
-        return this.Events;
+        return this.events;
     }
 
     public final void setEvents(Set<Event> Events) {
-        this.Events = Events;
+        this.events = Events;
     }
 }
