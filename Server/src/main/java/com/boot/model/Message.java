@@ -2,6 +2,7 @@ package com.boot.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,41 +14,45 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Events")
-public class Event implements Serializable {
+@Table(name = "Messages")
+public class Message implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "EventID", unique = true, nullable = false)
-    private Long EventID;
+    @Column(name = "MessageID", unique = true, nullable = false)
+    private Long MessageID;
 
     @Column(name = "Name", unique = true, nullable = false, length = 20)
     private String Name;
 
+    @Column(name = "Message", nullable = false, length = 255)
+    private String Message;
+
     @Column(name = "Time", nullable = false, length = 20)
-    private String Time;
+    private Date Time;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LocationID", nullable = false)
+    @JoinColumn(name = "UserID", nullable = false)
     @JsonBackReference
-    private Location location;
+    private User user;
 
-    public Event() {
+    public Message() {
     }
 
-    public Event(Long ID, String Name, String Time, Location location) {
+    public Message(Long ID, String Name, String Message, Date Time, User user) {
         this.setID(ID);
         this.setName(Name);
+        this.setMessage(Message);
         this.setTime(Time);
-        this.setLocation(location);
+        this.setUser(user);
     }
     
     public Long getID() {
-        return this.EventID;
+        return this.MessageID;
     }
 
     public final void setID(Long ID) {
-        this.EventID = ID;
+        this.MessageID = ID;
     }
     
     public String getName() {
@@ -58,19 +63,27 @@ public class Event implements Serializable {
         this.Name = Name;
     }
     
-    public String getTime() {
+    public String getMessage() {
+        return this.Message;
+    }
+
+    public final void setMessage(String Message) {
+        this.Message = Message;
+    }
+    
+    public Date getTime() {
         return this.Time;
     }
 
-    public final void setTime(String Time) {
+    public final void setTime(Date Time) {
         this.Time = Time;
     }
     
-    public Location getLocation() {
-        return this.location;
+    public User getUser() {
+        return this.user;
     }
 
-    public final void setLocation(Location location) {
-        this.location = location;
+    public final void setUser(User user) {
+        this.user = user;
     }
 }

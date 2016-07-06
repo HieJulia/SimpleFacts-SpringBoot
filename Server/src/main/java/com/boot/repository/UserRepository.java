@@ -1,8 +1,8 @@
 package com.boot.repository;
 
-import com.boot.model.Location;
+import com.boot.model.User;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LocationRepository extends JpaRepository<Location, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }

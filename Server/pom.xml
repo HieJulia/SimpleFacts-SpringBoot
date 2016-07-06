@@ -41,6 +41,11 @@
             <version>1.4.5</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <scope>compile</scope>
+        </dependency>
 		
         <!-- Hibernate -->
         <dependency>
