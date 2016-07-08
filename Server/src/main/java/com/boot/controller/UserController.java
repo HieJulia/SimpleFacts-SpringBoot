@@ -30,24 +30,26 @@ public class UserController {
     @RequestMapping(value = "Create", method = RequestMethod.GET)
     public void create() throws ParseException {
         Session session = HibernateUtil.getSessionFactory().openSession();
+        String number = Integer.toString((int) (Math.random() * 100));
 
         session.beginTransaction();
 
         User user = new User();
 
-        user.setName("bob");
+        user.setName("bob " + number);
 
         session.save(user);
 
+        
         Message message = new Message();
-        message.setName("oinks");
+        message.setName("oinks " + number);
         message.setMessage("Oiiiiiiiiiiiiiiiiiiiiiiinks");
 
-        Date in = new Date();
-        LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
-        Date out = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        //Date in = new Date();
+        //LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
+        //Date out = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
-        message.setTime(out);
+        //message.setTime(out);
         message.setUser(user);
 
         user.getMessages().add(message);
@@ -55,6 +57,7 @@ public class UserController {
         session.save(message);
 
         session.getTransaction().commit();
+        session.close();
         System.out.println("Done");
     }
 

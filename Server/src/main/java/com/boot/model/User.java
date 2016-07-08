@@ -20,11 +20,11 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "UserID", unique = true, nullable = false)
-    private Long UserID;
+    @Column(name = "userID", unique = true, nullable = false)
+    private Long userID;
     
-    @Column(name = "Name", unique = true, nullable = false, length = 20)
-    private String Name;
+    @Column(name = "name", unique = true, nullable = false, length = 20)
+    private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonManagedReference
@@ -44,19 +44,19 @@ public class User implements Serializable {
     }
     
     public Long getID() {
-        return this.UserID;
+        return this.userID;
     }
 
     public final void setID(Long ID) {
-        this.UserID = ID;
+        this.userID = ID;
     }
     
     public String getName() {
-        return this.Name;
+        return this.name;
     }
 
     public final void setName(String Name) {
-        this.Name = Name;
+        this.name = Name;
     }
     
     public Set<Message> getMessages() {

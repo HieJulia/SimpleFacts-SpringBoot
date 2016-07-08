@@ -1,10 +1,5 @@
 package com.boot;
 
-import org.hibernate.Session;
-
-import com.boot.model.Message;
-import com.boot.model.User;
-import com.boot.util.HibernateUtil;
 
 import java.util.concurrent.TimeUnit;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,7 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @SpringBootApplication
 @EnableAutoConfiguration

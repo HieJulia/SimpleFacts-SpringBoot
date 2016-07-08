@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Simple Facts 2</title>
+
+        <!--
+        --    Include the pages relevent CSS,
+        --    Bootstrap.css helps with the styling to make it easier
+        --    Font-Awesome is a font pack that has loads of icons
+        --    stylesheet.css is this pages personal css
+        -->
+        <link rel="stylesheet" href="Include/CSS/Plugins/Bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="Include/CSS/Plugins/FontAwesome/font-awesome.min.css">
+        <link rel="stylesheet" href="Include/CSS/stylesheet.css">
+    </head>
+    <body>
+        <!--
+        --    The pages header
+        -->
+        <header>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href='/SimpleFacts/'><i class="fa fa-user" aria-hidden="true"></i> Simple Facts for Spring People</a>
+                </div>
+            </nav>
+
+            <h3>Lets learn something new!</h3>
+        </header>
+        <!-- 
+        --    This template is used by the messageList component.
+        --    It is the template that shows the recent log of messages
+        --    Look for the tag: <messagelist-component> to see its reference
+        -->
+        <script type="text/x-template" id="messageList-template">
+            <ul class='speciallist'>
+                <li v-for="Message in Messages | orderBy 'ms'">
+                    <span>
+                        <span class='largeText'>
+                            {{ Message.name }}:
+                        </span>
+                        <span class='mediumText'>
+                            {{{ Message.value }}}
+                        </span>
+                        <span class='smallText' title='{{ Message.ms }}'>
+                            {{ Message.time }}
+                        </span>
+                    </span>
+                </li>
+            </ul>
+        </script>
+        <!-- 
+        --    This template is used by the channelList component.
+        --    It is the template that shows the active channels
+        --    Look for the tag: <channellist-component> to see its reference
+        -->
+        <script type="text/x-template" id="channelList-template">
+            <ul class='speciallist'>
+                <li v-for="Channel in Channels | orderBy 'joined' -1">
+                    <a href="#" onclick="addTagToChat('{{ Channel.name }}')">{{ Channel.name }}</a>
+                    <button v-if="Channel.joined" v-on:click="removeChannel(Channel)">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                    <button v-else v-on:click="subscribeChannel(Channel)">
+                        <i class="fa fa-level-up" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </script>
+        <!-- 
+        --    This template is used by the userList component.
+        --    It is the template that shows the currently logged in users
+        --    Look for the tag: <userlist-component> to see its reference
+        -->
+        <script type="text/x-template" id="userList-template">
+            <ul class='speciallist'>
+                <li v-for='User in Users'>
+                    <span>{{ User.name }}</span>
+                </li>
+            </ul>
+        </script>
+        <!-- 
+        --    The below section is the part of the page that vue operates on
+        -->
+        <section id="vueApp">
+            <div class='row ChatWindows'>
+                <!-- 
+                --    The message window, the left section of the screen
+                -->
+                <div class="col-sm-8 WindowContainer">
+                    <div>
+                        <div class='Window'>
+                            <div id='MessageHistoryList'>
+                                <messagelist-component :Messages="Messages"></messagelist-component>
+                            </div>
+                            <form id='MessageInputForm' class='InputForm'>
+                                <div class='divTextBox highlightTags' id='newcomment' data-placeholder='Tell me something new!' contenteditable='true'></div>
+                                <button>
+                                    <i class="fa fa-comment-o" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- 
+                --    The info window, the right section of the screen
+                -->
+                <div class="col-sm-4 WindowContainer">
+                    <div>
+                        <!-- 
+                        --    Currently logged in users
+                        -->
+                        <div class='Window' style='height:242px;'>
+                            <div id='ParticipantsList'>
+                                <userlist-component :Users="Users"></userlist-component>
+                            </div>
+                        </div>
+                        <!-- 
+                        --    Current active channels
+                        -->
+                        <div class='Window' style='height:243px;'>
+                            <div id='ActiveChannelsList'>
+                                <channellist-component :Channels="Channels"></channellist-component>
+                            </div>
+                            <form id='ChannelInputForm' class='InputForm'>
+                                <div class='divTextBox highlightTags' id='channelName' data-placeholder='Enter Channel Name' contenteditable='true'></div>
+                                <button>
+                                    <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- 
+                --    The overlay div for showing error messages and connection
+                --    information
+                -->
+                <div class="overlayDiv" id='overlayDiv'>
+                    <!-- 
+                    --    Connecting status message
+                    -->
+                    <div class="overlayMessageBox" id="connectingOverlay" style="display:block;">
+                        <h3>Connecting...</h3>
+                        <p style='display:block; margin:auto; width:32px; padding-right:5px;'>
+                            <i class="fa fa-refresh fa-2x fa-spin" aria-hidden="true"></i>
+                        </p>
+                    </div>
+                    <!-- 
+                    --    Disconnected status message
+                    -->
+                    <div class="overlayMessageBox" id="disconnectedOverlay">
+                        <h3>Disconnected</h3>
+                        <form id='ReconnectForm'>
+                            <button class='btn btn-lg' style='width:100%;'>Reconnect</button>
+                        </form>
+                    </div>
+                    <!-- 
+                    --    Connected status message & requesting display name
+                    -->
+                    <div class="overlayMessageBox" id="connectedOverlay">
+                        <h3>Connected</h3>
+                        <p>Please tell us your name</p>
+                        <p id='displayNameError' class='errormessage' style='position:absolute; top:3px; left:0px; width:100%; font-weight:bold; opacity:0.35;'>Name Too Short</p>
+                        <form id='NameInputForm' class='InputForm'>
+                            <input type='text' value='' placeholder='Enter Display Name'/>
+                            <button>
+                                <i class="fa fa-check-square-o fa-2x" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 
+        --    Page footer
+        -->
+        <footer>
+            This application is a v2 of my previous Simple Facts project found <a>here</a><br/>
+            This version of the application uses a SpringBoot server as the backend instead of PHP<br/>
+            If the demonstration is not currently working, then it is most likely because the service on the server has been intentionally stopped.<br/>
+            You can review the code for this application online on github: <a href='https://github.com/mhaddon/SimpleFacts2'>here</a>.<br/>
+            Please view my other projects and experiments at: <a href='https://michael.haddon.me'>michael.haddon.me</a>.<br/>
+            Thankyou,<br/>
+            - Michael.
+        </footer>
+
+        <!--
+        --    Include the pages relevent JS,
+        --
+        --    autobahn.min.js makes handling websockets easier, this is an old
+        --       version of autobahn as the new version is built around WAMPv2, 
+        --       where it seems that Ratchet only supports WAMPv1.
+        --
+        --    vue-dev.js is the development version of vue. The difference is that
+        --        vue-dev shows the error and debug messages.
+        --        Vue is a MVVM based library which essentially tries to seperate
+        --        the pages designing and programming aspects.
+        --
+        --    ContentEditable.js is responsible for making the tags you type into
+        --        the messagebox turn blue.... In short, instead of being an
+        --        input tag, it is instead a div with the contenteditable attribute
+        --        the code for this is inspired from this: http://jsfiddle.net/5Eu2E/2/
+        --
+        --    ViewModel.js is responsible for handling and controlling the Vue code
+        --        
+        --    Scene.js is the file that is responsible for the pages "Scene", ie
+        --        it holds all the pages core information in one place, to try
+        --        to avoid loads of global variables and functions
+        --
+        --    Socket.js is responsible for sorting out how the websockets should
+        --        behave. 
+        --
+        --    App.js just brings everything together.
+        -->
+        <script src="Include/JS/Plugins/Autobahn/autobahn.min.js"></script>
+        <script src="Include/JS/Plugins/Vue/vue-dev.js"></script>
+        <script src="Include/JS/ContentEditable.js"></script>
+        <script src="Include/JS/ViewModel.js"></script>
+        <script src="Include/JS/Scene.js"></script>
+        <script src="Include/JS/Socket.js"></script>
+        <script src="Include/JS/App.js"></script>
+    </body>
+</html>

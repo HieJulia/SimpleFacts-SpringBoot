@@ -19,66 +19,66 @@ public class Message implements Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "MessageID", unique = true, nullable = false)
-    private Long MessageID;
+    @Column(name = "messageID", unique = true, nullable = false)
+    private Long messageID;
 
-    @Column(name = "Name", unique = true, nullable = false, length = 20)
-    private String Name;
+    @Column(name = "name", unique = true, nullable = false, length = 20)
+    private String name;
 
-    @Column(name = "Message", nullable = false, length = 255)
-    private String Message;
+    @Column(name = "message", nullable = false, length = 255)
+    private String message;
 
-    @Column(name = "Time", nullable = false, length = 20)
-    private Date Time;
+    //@Column(name = "time", nullable = false, length = 20)
+    //private Date time;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID", nullable = false)
+    @JoinColumn(name = "userID", nullable = false)
     @JsonBackReference
     private User user;
 
     public Message() {
     }
 
-    public Message(Long ID, String Name, String Message, Date Time, User user) {
+    public Message(Long ID, String Name, String Message, User user) {
         this.setID(ID);
         this.setName(Name);
         this.setMessage(Message);
-        this.setTime(Time);
+        //this.setTime(Time);
         this.setUser(user);
     }
     
     public Long getID() {
-        return this.MessageID;
+        return this.messageID;
     }
 
     public final void setID(Long ID) {
-        this.MessageID = ID;
+        this.messageID = ID;
     }
     
     public String getName() {
-        return this.Name;
+        return this.name;
     }
 
     public final void setName(String Name) {
-        this.Name = Name;
+        this.name = Name;
     }
     
     public String getMessage() {
-        return this.Message;
+        return this.message;
     }
 
     public final void setMessage(String Message) {
-        this.Message = Message;
+        this.message = Message;
     }
-    
+    /*
     public Date getTime() {
-        return this.Time;
+        return this.time;
     }
 
     public final void setTime(Date Time) {
-        this.Time = Time;
+        this.time = Time;
     }
-    
+    */
     public User getUser() {
         return this.user;
     }
