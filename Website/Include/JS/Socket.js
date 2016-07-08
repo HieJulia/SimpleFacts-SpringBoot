@@ -14,6 +14,8 @@ var SocketController = function () {
      * This variable holds the Autobahn Websocket connection information.
      */
     this.conn = null;
+    
+    this.client = null;
 
     /**
      * This object holds all the various loose variables
@@ -36,6 +38,7 @@ var SocketController = function () {
      */
     return {
         conn: this.conn,
+        client: this.client,
         Data: this.Data,
         connect: this.connect,
         onOpen: this.onOpen,
@@ -43,6 +46,7 @@ var SocketController = function () {
         Close: this.Close,
         Subscribe: this.Subscribe,
         unSubscribe: this.unSubscribe,
+        getTopicURL: this.getTopicURL,
         onBroadcast: this.onBroadcast,
         Broadcast: this.Broadcast,
         onMessage: this.onMessage,
@@ -67,10 +71,11 @@ SocketController.prototype.connect = function () {
      * but we want the Class to be the context (because we can easily do this.conn)
      * so we bind the classes context to the functions we pass through.
      */
-    this.conn = new ab.Session('wss://wss.haddon.me',
-            this.onOpen.bind(this),
-            this.onClose.bind(this),
-            {'skipSubprotocolCheck': true});
+            
+    this.conn = new SockJS('http://localhost:8080/hello');
+    this.client = Stomp.over(this.conn);
+    this.client.connect({}, this.onOpen().bind(this));
+    
 
     /**
      * This function tells the page to update its DOM to show the connecting thing
@@ -173,7 +178,7 @@ SocketController.prototype.Subscribe = function (topic) {
      */
     topic.forEach(function (e) {
         if (!ViewModel.isSubscribed(e)) {
-            this.conn.subscribe(e, this.onBroadcast.bind(this));
+            this.client.subscribe(this.getTopicURL(e), this.onBroadcast.bind(this));
             if (e !== 'system') {
                 ViewModel.Subscribe(e);
                 this.saveChannel(e);
@@ -228,7 +233,7 @@ SocketController.prototype.unSubscribe = function (topic) {
      */
     topic.forEach(function (e) {
         if (ViewModel.isSubscribed(e)) {
-            this.conn.unsubscribe(e);
+            this.client.unsubscribe(e);
             ViewModel.unSubscribe(e);
             this.removeChannel(e);
         }
@@ -243,7 +248,15 @@ SocketController.prototype.unSubscribe = function (topic) {
  * @returns {undefined}
  */
 SocketController.prototype.Broadcast = function (topic, data) {
-    this.conn.publish(topic.toLowerCase(), data);
+    this.client.send(this.getAppURL(topic), {}, JSON.stringify(data));
+}
+
+SocketController.prototype.getAppURL = function (topic) {
+    return "http://localhost:8080/app/" + topic.replace('#','').toLowerCase();
+}
+
+SocketController.prototype.getTopicURL = function (topic) {
+    return "http://localhost:8080/topic/" + topic.replace('#','').toLowerCase();
 }
 
 /**
@@ -296,9 +309,9 @@ SocketController.prototype.onBroadcast = function (topic, data) {
  * @returns {undefined}
  */
 SocketController.prototype.updateName = function () {
-    this.conn.publish('system', {
+    this.client.send(this.getAppURL('system'), {}, JSON.stringify({
         name: Scene.Data.User.Name
-    });
+    }))
 }
 
 /**
@@ -355,7 +368,7 @@ SocketController.prototype.restoreChannels = function () {
 
     if (ChannelStorage) {
         this.Subscribe(JSON.parse(ChannelStorage));
-        this.conn.subscribe('system', this.onBroadcast.bind(this));
+        this.client.subscribe(this.getTopicURL('system'), this.onBroadcast.bind(this));
 
         return true;
     }

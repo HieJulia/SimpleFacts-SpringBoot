@@ -176,7 +176,7 @@
         -->
         <footer>
             This application is a v2 of my previous Simple Facts project found <a>here</a><br/>
-            This version of the application uses a SpringBoot server as the backend instead of PHP<br/>
+            This version of the application uses a SpringBoot/RabbitMQ server as the backend instead of PHP/ZeroMQ<br/>
             If the demonstration is not currently working, then it is most likely because the service on the server has been intentionally stopped.<br/>
             You can review the code for this application online on github: <a href='https://github.com/mhaddon/SimpleFacts2'>here</a>.<br/>
             Please view my other projects and experiments at: <a href='https://michael.haddon.me'>michael.haddon.me</a>.<br/>
@@ -186,6 +186,12 @@
 
         <!--
         --    Include the pages relevent JS,
+        --
+        --    sock.js makes handling websockets easier. It also has fallbacks
+        --        which have environments where websockets are disabled or blocked,
+        --        
+        --    stomp.js helps integrate websockets with RabbitMQ
+        --
         --
         --    autobahn.min.js makes handling websockets easier, this is an old
         --       version of autobahn as the new version is built around WAMPv2, 
@@ -212,7 +218,8 @@
         --
         --    App.js just brings everything together.
         -->
-        <script src="Include/JS/Plugins/Autobahn/autobahn.min.js"></script>
+        <script src="Include/JS/Plugins/SockJS/sockjs.js"></script>
+        <script src="Include/JS/Plugins/Stomp/stomp.js"></script>
         <script src="Include/JS/Plugins/Vue/vue-dev.js"></script>
         <script src="Include/JS/ContentEditable.js"></script>
         <script src="Include/JS/ViewModel.js"></script>
