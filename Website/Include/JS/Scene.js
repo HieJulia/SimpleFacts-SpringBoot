@@ -199,8 +199,8 @@ SceneController.prototype.onMessageSubmitted = function (e) {
             Tags.forEach(function (e) {
                 Socket.Broadcast(e, {
                     ID: messageID,
-                    msg: Message,
-                    name: this.Data.User.Name
+                    message: Message,
+                    username: this.Data.User.Name
                 });
             }.bind(this));
 

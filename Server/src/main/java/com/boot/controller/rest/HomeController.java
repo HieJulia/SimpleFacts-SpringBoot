@@ -1,4 +1,4 @@
-package com.boot.controller;
+package com.boot.controller.rest;
 
 /**
  * Created by Admin on 27/05/2016.

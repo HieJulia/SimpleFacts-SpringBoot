@@ -46,6 +46,7 @@ var SocketController = function () {
         Close: this.Close,
         Subscribe: this.Subscribe,
         unSubscribe: this.unSubscribe,
+        getAppURL: this.getAppURL,
         getTopicURL: this.getTopicURL,
         onBroadcast: this.onBroadcast,
         Broadcast: this.Broadcast,
@@ -74,8 +75,8 @@ SocketController.prototype.connect = function () {
             
     this.conn = new SockJS('http://localhost:8080/hello');
     this.client = Stomp.over(this.conn);
-    this.client.connect({}, this.onOpen().bind(this));
-    
+    //this.client.connect({}, this.onOpen.bind(this));
+    this.client.connect("guest", "guest", this.onOpen.bind(this), {});
 
     /**
      * This function tells the page to update its DOM to show the connecting thing
@@ -252,11 +253,11 @@ SocketController.prototype.Broadcast = function (topic, data) {
 }
 
 SocketController.prototype.getAppURL = function (topic) {
-    return "http://localhost:8080/app/" + topic.replace('#','').toLowerCase();
+    return "/app/chat.message." + topic.replace('#','').toLowerCase();
 }
 
 SocketController.prototype.getTopicURL = function (topic) {
-    return "http://localhost:8080/topic/" + topic.replace('#','').toLowerCase();
+    return "/topic/chat.message." + topic.replace('#','').toLowerCase();
 }
 
 /**
@@ -309,8 +310,8 @@ SocketController.prototype.onBroadcast = function (topic, data) {
  * @returns {undefined}
  */
 SocketController.prototype.updateName = function () {
-    this.client.send(this.getAppURL('system'), {}, JSON.stringify({
-        name: Scene.Data.User.Name
+    this.client.send('/app/system.name', {}, JSON.stringify({
+        username: Scene.Data.User.Name
     }))
 }
 

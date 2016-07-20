@@ -1,5 +1,6 @@
-package com.boot.model;
+package com.boot.model.entity;
 
+import com.boot.model.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,16 +23,13 @@ public class Message implements Serializable {
     @Column(name = "messageID", unique = true, nullable = false)
     private Long messageID;
 
-    @Column(name = "name", unique = true, nullable = false, length = 20)
-    private String name;
-
     @Column(name = "message", nullable = false, length = 255)
     private String message;
 
     //@Column(name = "time", nullable = false, length = 20)
     //private Date time;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userID", nullable = false)
     @JsonBackReference
     private User user;
@@ -39,9 +37,8 @@ public class Message implements Serializable {
     public Message() {
     }
 
-    public Message(Long ID, String Name, String Message, User user) {
+    public Message(Long ID, String Message, User user) {
         this.setID(ID);
-        this.setName(Name);
         this.setMessage(Message);
         //this.setTime(Time);
         this.setUser(user);
@@ -53,14 +50,6 @@ public class Message implements Serializable {
 
     public final void setID(Long ID) {
         this.messageID = ID;
-    }
-    
-    public String getName() {
-        return this.name;
-    }
-
-    public final void setName(String Name) {
-        this.name = Name;
     }
     
     public String getMessage() {

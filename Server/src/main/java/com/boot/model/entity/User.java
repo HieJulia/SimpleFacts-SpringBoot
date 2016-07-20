@@ -1,4 +1,4 @@
-package com.boot.model;
+package com.boot.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
@@ -26,7 +26,7 @@ public class User implements Serializable {
     @Column(name = "name", unique = true, nullable = false, length = 20)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonManagedReference
     private Set<Message> messages = new HashSet<Message>(0);
 

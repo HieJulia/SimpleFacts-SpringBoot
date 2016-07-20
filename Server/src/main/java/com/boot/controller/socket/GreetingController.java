@@ -1,4 +1,4 @@
-package com.boot.controller;
+package com.boot.controller.socket;
 
 import com.boot.model.Greeting;
 import com.boot.model.HelloDummy;
