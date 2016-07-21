@@ -40,6 +40,8 @@ public class Receiver {
 
             Message message = new Message();
             message.setMessage(chatMessage.getMessage());
+            message.setFingerprint(chatMessage.getFingerprint());
+            message.setTime(chatMessage.getTime());
             message.setUser(user);
 
             user.getMessages().add(message);
@@ -49,6 +51,7 @@ public class Receiver {
             session.getTransaction().commit();
             session.close();
             
+            System.out.println("Saved Message");
         } else if (envelope.getType().toUpperCase().equals("CHATNAME")) {
             ChatName chatName = mapper.readValue(envelope.getPayload(), ChatName.class);
             
@@ -60,6 +63,8 @@ public class Receiver {
             session.save(user);
             session.getTransaction().commit();
             session.close();
+            
+            System.out.println("Registered Username");
         } else {
             System.out.println("REJECTED MESSAGE");
         }

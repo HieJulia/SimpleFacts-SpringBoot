@@ -34,15 +34,15 @@
         -->
         <script type="text/x-template" id="messageList-template">
             <ul class='speciallist'>
-                <li v-for="Message in Messages | orderBy 'ms'">
+                <li v-for="Message in Messages | orderBy 'time'">
                     <span>
                         <span class='largeText'>
-                            {{ Message.name }}:
+                            {{ Message.username }}:
                         </span>
                         <span class='mediumText'>
-                            {{{ Message.value }}}
+                            {{{ Message.message }}}
                         </span>
-                        <span class='smallText' title='{{ Message.ms }}'>
+                        <span class='smallText' title='{{ Message.time }}'>
                             {{ Message.time }}
                         </span>
                     </span>

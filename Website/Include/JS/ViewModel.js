@@ -168,14 +168,14 @@ var ViewModel = new (function () {
                 return false;
             },
             /**
-             * Finds the index of a specific message id in the messagelist.
-             * @param {String} ID
+             * Finds the index of a specific message fingerprint in the messagelist.
+             * @param {String} fingerprint
              * @returns {Number|Boolean}
              */
-            MessageListIndex: function (ID) {
+            MessageListIndex: function (fingerprint) {
                 for (var i = 0; i < this.Messages.length; i++) {
                     var e = this.Messages[i];
-                    if ((typeof e.ID !== 'undefined') && (e.ID === ID)) {
+                    if ((typeof e.fingerprint !== 'undefined') && (e.fingerprint === fingerprint)) {
                         return i;
                     }
                 }
@@ -190,10 +190,9 @@ var ViewModel = new (function () {
              */
             addUser: function (data) {
                 this.addMessage({
-                    name: 'SYSTEM',
-                    value: data.Name + ' has joined the server',
-                    time: '',
-                    ms: this.getMostRecentMessageTime() + 1
+                    username: 'SYSTEM',
+                    message: data.Name + ' has joined the server',
+                    time: this.getMostRecentMessageTime() + 1
                 });
 
                 if (this.UserListIndex(data.ID) !== false) {
@@ -215,10 +214,9 @@ var ViewModel = new (function () {
 
                 if (UserIndex !== false) {
                     this.addMessage({
-                        name: 'SYSTEM',
-                        value: this.Users[UserIndex].name + ' has disconnected',
-                        time: '',
-                        ms: this.getMostRecentMessageTime() + 1
+                        username: 'SYSTEM',
+                        message: this.Users[UserIndex].name + ' has disconnected',
+                        time: this.getMostRecentMessageTime() + 1
                     });
 
                     this.Users.$remove(this.Users[UserIndex]);
@@ -233,6 +231,7 @@ var ViewModel = new (function () {
              * @returns {undefined}
              */
             addMessage: function (data) {
+                console.log(data);
                 /**
                  * If a client is connected to multiple channels, and they recieve
                  * a message that goes out to these channels, then the client
@@ -241,8 +240,8 @@ var ViewModel = new (function () {
                  * This ensures that the message will not be added multiple times
                  * to the message log.
                  */
-                if (!this.MessageListIndex(data.ID)) {
-                    data.value = data.value.replace(/\#+([a-zA-Z_]{1,20})/g, '<a href="#" onclick="addTagToChat(\'$1\')">#$1</a>');
+                if (!this.MessageListIndex(data.fingerprint)) {
+                    data.message = data.message.replace(/\#+([a-zA-Z_]{1,20})/g, '<a href="#" onclick="addTagToChat(\'$1\')">#$1</a>');
                     this.Messages.push(data);
 
                     /**
@@ -284,8 +283,8 @@ var ViewModel = new (function () {
                 var lastTime = 0;
                 for (var i = 0; i < this.Messages.length; i++) {
                     var e = this.Messages[i];
-                    if (e.ms > lastTime) {
-                        lastTime = e.ms;
+                    if (e.time > lastTime) {
+                        lastTime = e.time;
                     }
                 }
                 return lastTime;
@@ -326,10 +325,9 @@ var ViewModel = new (function () {
              */
             Subscribe: function (topic) {
                 this.addMessage({
-                    name: 'SYSTEM',
-                    value: 'You have subscribed to ' + topic,
-                    time: '',
-                    ms: this.getMostRecentMessageTime() + 1
+                    username: 'SYSTEM',
+                    message: 'You have subscribed to ' + topic,
+                    time: this.getMostRecentMessageTime() + 1
                 });
 
                 this.addChannel(topic, true, true);
@@ -341,10 +339,9 @@ var ViewModel = new (function () {
              */
             unSubscribe: function (topic) {
                 this.addMessage({
-                    name: 'SYSTEM',
-                    value: 'You have unsubscribed from ' + topic,
-                    time: '',
-                    ms: this.Messages[this.Messages.length - 1].ms + 1
+                    username: 'SYSTEM',
+                    message: 'You have unsubscribed from ' + topic,
+                    time: this.Messages[this.Messages.length - 1].time + 1
                 });
 
                 this.addChannel(topic, false, true);

@@ -14,7 +14,7 @@ var SocketController = function () {
      * This variable holds the Autobahn Websocket connection information.
      */
     this.conn = null;
-    
+
     this.client = null;
 
     /**
@@ -72,7 +72,7 @@ SocketController.prototype.connect = function () {
      * but we want the Class to be the context (because we can easily do this.conn)
      * so we bind the classes context to the functions we pass through.
      */
-            
+
     this.conn = new SockJS('http://localhost:8080/hello');
     this.client = Stomp.over(this.conn);
     //this.client.connect({}, this.onOpen.bind(this));
@@ -194,11 +194,10 @@ SocketController.prototype.Subscribe = function (topic) {
     loadJSON('/SimpleFacts/ajax.retrieveMessages.php?topics=' + topic.join(',').replace(/#/g, '@'), function (obj) {
         obj.forEach(function (e) {
             ViewModel.addMessage({
-                ID: e.ID,
+                fingerprint: e.fingerprint,
                 name: e.name,
                 value: e.msg,
-                time: e.time,
-                ms: e.ms
+                time: e.time
             });
         });
     });
@@ -253,11 +252,11 @@ SocketController.prototype.Broadcast = function (topic, data) {
 }
 
 SocketController.prototype.getAppURL = function (topic) {
-    return "/app/chat.message." + topic.replace('#','').toLowerCase();
+    return "/app/chat.message." + topic.replace('#', '').toLowerCase();
 }
 
 SocketController.prototype.getTopicURL = function (topic) {
-    return "/topic/chat.message." + topic.replace('#','').toLowerCase();
+    return "/topic/chat.message." + topic.replace('#', '').toLowerCase();
 }
 
 /**
@@ -266,42 +265,17 @@ SocketController.prototype.getTopicURL = function (topic) {
  *
  * This method tells the client what to do with the message they have recieved
  *
- * @param {String} topic
  * @param {Array|String|Object} data
  * @returns {undefined}
  */
-SocketController.prototype.onBroadcast = function (topic, data) {
-    /**
-     * If the message comes from the System topic, then it is a status update
-     * of something, and is needs to be handled differently than normal messages.
-     */
-    if (topic === 'system') {
-        if (data.Type === 'nameChange') {
-            data.Data.forEach(function (e) {
-                if (e.Name.length === 0) {
-                    ViewModel.removeUser(e);
-                } else {
-                    ViewModel.addUser(e);
-                }
-            }.bind(this));
-        } else if (data.Type === 'topicActivity') {
-            data.Data.forEach(function (e) {
-                ViewModel.addChannel(e, false, false);
-            }.bind(this));
-        }
-    } else {
-        /**
-         * If its a normal message, then lets just list this message in the
-         * message logs.
-         */
-        ViewModel.addMessage({
-            ID: data.ID,
-            name: data.name,
-            value: data.msg,
-            time: data.time,
-            ms: data.ms
-        });
-    }
+SocketController.prototype.onBroadcast = function (data) {
+    var json = JSON.parse(data.body);
+    ViewModel.addMessage({
+        fingerprint: json.fingerprint,
+        username: json.username,
+        message: json.message,
+        time: json.time
+    });
 }
 
 /**

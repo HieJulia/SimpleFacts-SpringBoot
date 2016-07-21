@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Messages")
@@ -26,8 +27,12 @@ public class Message implements Serializable {
     @Column(name = "message", nullable = false, length = 255)
     private String message;
 
-    //@Column(name = "time", nullable = false, length = 20)
-    //private Date time;
+    @Column(name = "fingerprint", nullable = false, length = 255)
+    private String fingerprint;
+
+    @Column(name = "time", nullable = false, length = 20)
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date time;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userID", nullable = false)
@@ -37,10 +42,11 @@ public class Message implements Serializable {
     public Message() {
     }
 
-    public Message(Long ID, String Message, User user) {
+    public Message(Long ID, String Message, String Fingerprint, Date Time, User user) {
         this.setID(ID);
         this.setMessage(Message);
-        //this.setTime(Time);
+        this.setFingerprint(Fingerprint);
+        this.setTime(Time);
         this.setUser(user);
     }
     
@@ -59,7 +65,15 @@ public class Message implements Serializable {
     public final void setMessage(String Message) {
         this.message = Message;
     }
-    /*
+    
+    public String getFingerprint() {
+        return this.fingerprint;
+    }
+
+    public final void setFingerprint(String Fingerprint) {
+        this.fingerprint = Fingerprint;
+    }
+    
     public Date getTime() {
         return this.time;
     }
@@ -67,7 +81,7 @@ public class Message implements Serializable {
     public final void setTime(Date Time) {
         this.time = Time;
     }
-    */
+    
     public User getUser() {
         return this.user;
     }

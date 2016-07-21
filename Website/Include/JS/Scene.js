@@ -198,7 +198,7 @@ SceneController.prototype.onMessageSubmitted = function (e) {
             Socket.Subscribe(Tags);
             Tags.forEach(function (e) {
                 Socket.Broadcast(e, {
-                    ID: messageID,
+                    fingerprint: messageID,
                     message: Message,
                     username: this.Data.User.Name
                 });

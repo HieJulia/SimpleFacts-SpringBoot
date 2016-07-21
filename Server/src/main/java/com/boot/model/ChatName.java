@@ -5,7 +5,7 @@ public class ChatName {
     private String username;
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -14,6 +14,6 @@ public class ChatName {
 
     @Override
     public String toString() {
-        return "ChatName [user=" + username + "]";
+        return "ChatName [user=" + this.username + "]";
     }
 }
