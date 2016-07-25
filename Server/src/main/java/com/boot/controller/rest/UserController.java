@@ -1,6 +1,5 @@
 package com.boot.controller.rest;
 
-import com.boot.model.entity.Message;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -12,13 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.boot.model.entity.User;
-import com.boot.util.HibernateUtil;
-import org.hibernate.Session;
 import com.boot.repository.UserRepository;
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 @RestController
 @RequestMapping("api/v1/")

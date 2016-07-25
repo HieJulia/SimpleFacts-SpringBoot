@@ -13,7 +13,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-//http://www.mkyong.com/hibernate/hibernate-one-to-many-relationship-example-annotation/
+/**
+ * This method is responsible for handling the objects that are being 
+ * sent to/retrieved from the database.
+ * 
+ * It has a OneToMany relationship with com.boot.model.entity.Message
+ * 
+ * Credit to: http://www.mkyong.com/hibernate/hibernate-one-to-many-relationship-example-annotation/
+ */
 @Entity
 @Table(name = "Users")
 public class User implements Serializable {

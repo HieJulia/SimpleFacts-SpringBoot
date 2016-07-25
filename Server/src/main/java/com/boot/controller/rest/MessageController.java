@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.boot.model.entity.Message;
 import com.boot.repository.MessageRepository;
 
+
 @RestController
 @RequestMapping("api/v1/")
 public class MessageController {

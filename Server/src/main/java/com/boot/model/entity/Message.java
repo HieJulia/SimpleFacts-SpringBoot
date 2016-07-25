@@ -1,6 +1,5 @@
 package com.boot.model.entity;
 
-import com.boot.model.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +14,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
+/**
+ * This method is responsible for handling the objects that are being 
+ * sent to/retrieved from the database.
+ * 
+ * It has a ManyToOne relationship with com.boot.model.entity.User
+ * 
+ * Credit to: http://www.mkyong.com/hibernate/hibernate-one-to-many-relationship-example-annotation/
+ */
 @Entity
 @Table(name = "Messages")
 public class Message implements Serializable {

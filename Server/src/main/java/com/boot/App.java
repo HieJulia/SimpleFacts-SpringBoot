@@ -18,8 +18,7 @@ public class App implements CommandLineRunner {
     
     @Autowired
     Receiver receiver;
-
-
+    
     final static String queueName = "spring-boot";
 
     public static void main(String[] args) {

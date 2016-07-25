@@ -9,7 +9,6 @@ import com.boot.util.EnvelopeUtil;
 import com.boot.util.HibernateUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,7 @@ public class Receiver {
         
         ObjectMapper mapper = new ObjectMapper();
         EnvelopeUtil envelope = mapper.readValue(receivedMessage, EnvelopeUtil.class);
+        
         
         System.out.println("Received <" + receivedMessage + ">");
         
