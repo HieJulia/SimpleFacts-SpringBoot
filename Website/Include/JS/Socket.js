@@ -285,7 +285,7 @@ SocketController.prototype.onBroadcast = function (data) {
  */
 SocketController.prototype.updateName = function () {
     this.client.send('/app/system.name', {}, JSON.stringify({
-        username: Scene.Data.User.Name
+        name: Scene.Data.User.Name
     }))
 }
 

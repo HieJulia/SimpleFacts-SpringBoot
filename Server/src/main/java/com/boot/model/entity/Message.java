@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.springframework.data.annotation.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -45,6 +46,9 @@ public class Message implements Serializable {
     @JoinColumn(name = "userID", nullable = false)
     @JsonBackReference
     private User user;
+    
+    @Transient
+    private String username;
 
     public Message() {
     }
@@ -95,5 +99,18 @@ public class Message implements Serializable {
 
     public final void setUser(User user) {
         this.user = user;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String toString() {
+        return "Message [user=" + this.user + ", message=" + this.message + ", time=" + this.time + ", fingerprint=" + this.fingerprint + "]";
     }
 }

@@ -1,7 +1,5 @@
 package com.boot;
 
-import com.boot.model.ChatMessage;
-import com.boot.model.ChatName;
 import com.boot.model.entity.Message;
 import com.boot.model.entity.User;
 import com.boot.repository.UserRepository;
@@ -31,17 +29,13 @@ public class Receiver {
         System.out.println("Received <" + receivedMessage + ">");
         
         if (envelope.getType().toUpperCase().equals("CHATMESSAGE")) {
-            ChatMessage chatMessage = mapper.readValue(envelope.getPayload(), ChatMessage.class);
+            Message message = mapper.readValue(envelope.getPayload(), Message.class);
             
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             
-            User user = userRepository.findFirstByName(chatMessage.getUsername());
-
-            Message message = new Message();
-            message.setMessage(chatMessage.getMessage());
-            message.setFingerprint(chatMessage.getFingerprint());
-            message.setTime(chatMessage.getTime());
+            User user = userRepository.findFirstByName(message.getUsername());
+            
             message.setUser(user);
 
             user.getMessages().add(message);
@@ -53,13 +47,11 @@ public class Receiver {
             
             System.out.println("Saved Message");
         } else if (envelope.getType().toUpperCase().equals("CHATNAME")) {
-            ChatName chatName = mapper.readValue(envelope.getPayload(), ChatName.class);
             
             Session session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             
-            User user = new User();
-            user.setName(chatName.getUsername());
+            User user = mapper.readValue(envelope.getPayload(), User.class);
             session.save(user);
             session.getTransaction().commit();
             session.close();

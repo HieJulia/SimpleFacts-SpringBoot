@@ -73,4 +73,9 @@ public class User implements Serializable {
     public final void setMessages(Set<Message> Messages) {
         this.messages = Messages;
     }
+
+    @Override
+    public String toString() {
+        return "User [user=" + this.name + "]";
+    }
 }

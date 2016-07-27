@@ -1,7 +1,7 @@
 package com.boot.controller.socket;
 
-import com.boot.model.ChatMessage;
-import com.boot.model.ChatName;
+import com.boot.model.entity.User;
+import com.boot.model.entity.Message;
 import com.boot.util.EnvelopeUtil;
 import java.util.Date;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,7 +22,7 @@ public class ChatController {
     
     @MessageMapping("/system.name")
     @SendTo("/topic/system.name")
-    public ChatName registerUser(ChatName chatName, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+    public User registerUser(User chatName, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         System.out.println("Received Username Registration [" + chatName.toString() + "]");
         EnvelopeUtil envelope = new EnvelopeUtil("ChatName", chatName);
         
@@ -33,7 +33,7 @@ public class ChatController {
     
     @MessageMapping("/chat.message.{channel}")
     @SendTo("/topic/chat.message.{channel}")
-    public ChatMessage addChatMessage(ChatMessage chatMessage, @DestinationVariable("channel") String channelname, SimpMessageHeaderAccessor headerAccessor) throws Exception {
+    public Message addChatMessage(Message chatMessage, @DestinationVariable("channel") String channelname, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         chatMessage.setTime(new Date(System.currentTimeMillis()));
         
         System.out.println("Received Chat Message [" + chatMessage.toString() + "]");
