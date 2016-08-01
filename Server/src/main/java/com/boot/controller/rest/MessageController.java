@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.boot.model.entity.Message;
-import com.boot.repository.MessageRepository;
+import com.boot.repository.JPA.MessageRepository;
 
 
 @RestController

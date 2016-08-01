@@ -2,6 +2,7 @@ package com.boot.controller.socket;
 
 import com.boot.model.entity.User;
 import com.boot.model.entity.Message;
+import com.boot.repository.ConnectedUserRepository;
 import com.boot.util.EnvelopeUtil;
 import java.util.Date;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -20,6 +21,9 @@ public class ChatController {
     @Autowired
     RabbitTemplate rabbitTemplate;
     
+    @Autowired
+    ConnectedUserRepository connectedUsers;
+    
     @MessageMapping("/system.name")
     @SendTo("/topic/system.name")
     public User registerUser(User chatName, SimpMessageHeaderAccessor headerAccessor) throws Exception {
@@ -27,6 +31,7 @@ public class ChatController {
         EnvelopeUtil envelope = new EnvelopeUtil("ChatName", chatName);
         
         rabbitTemplate.convertAndSend(queueName, envelope.toJSON());
+        connectedUsers.setUsername(headerAccessor.getSessionId(), chatName.getName());
         
         return chatName;
     }
@@ -43,5 +48,4 @@ public class ChatController {
         
         return chatMessage;
     }
-
 }

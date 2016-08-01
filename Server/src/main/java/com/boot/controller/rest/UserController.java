@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.boot.model.entity.User;
-import com.boot.repository.UserRepository;
+import com.boot.repository.JPA.UserRepository;
 
 @RestController
 @RequestMapping("api/v1/")

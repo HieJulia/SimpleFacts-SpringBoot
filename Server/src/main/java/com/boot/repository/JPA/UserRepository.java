@@ -1,4 +1,4 @@
-package com.boot.repository;
+package com.boot.repository.JPA;
 
 import com.boot.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
