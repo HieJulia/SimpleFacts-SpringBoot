@@ -11,10 +11,6 @@ public class ConnectedUserRepository {
         connectedUsers.put(sessionID, "Guest");
     }
     
-//    public List<User> getUsers() {
-//        
-//    }
-    
     public void remove(String sessionID) {
         connectedUsers.remove(sessionID);
     }
