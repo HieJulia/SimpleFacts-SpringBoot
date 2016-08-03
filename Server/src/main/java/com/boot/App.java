@@ -1,6 +1,5 @@
 package com.boot;
 
-import java.util.Hashtable;
 import java.util.concurrent.TimeUnit;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

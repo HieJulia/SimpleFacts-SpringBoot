@@ -1,9 +1,9 @@
 package com.boot.repository;
 
-import com.boot.model.entity.User;
 import java.util.Hashtable;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ConnectedUserRepository {
     private Hashtable<String, String> connectedUsers = new Hashtable<>();
     

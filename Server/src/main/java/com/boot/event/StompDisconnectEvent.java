@@ -1,9 +1,6 @@
 package com.boot.event;
 
 import com.boot.repository.ConnectedUserRepository;
-import com.mysql.jdbc.log.Log;
-import java.util.Hashtable;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -14,7 +11,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 public class StompDisconnectEvent implements ApplicationListener<SessionDisconnectEvent> {
     
     @Autowired
-    ConnectedUserRepository connectedUsers;
+    private ConnectedUserRepository connectedUsers;
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {

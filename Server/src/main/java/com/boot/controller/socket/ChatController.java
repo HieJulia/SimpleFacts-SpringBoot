@@ -22,7 +22,7 @@ public class ChatController {
     RabbitTemplate rabbitTemplate;
     
     @Autowired
-    ConnectedUserRepository connectedUsers;
+    private ConnectedUserRepository connectedUsers;
     
     @MessageMapping("/system.name")
     @SendTo("/topic/system.name")
