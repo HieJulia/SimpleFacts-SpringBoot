@@ -49,6 +49,7 @@ var SocketController = function () {
         getAppURL: this.getAppURL,
         getTopicURL: this.getTopicURL,
         onBroadcast: this.onBroadcast,
+        onSystemBroadcast: this.onSystemBroadcast,
         Broadcast: this.Broadcast,
         onMessage: this.onMessage,
         updateName: this.updateName,
@@ -110,7 +111,7 @@ SocketController.prototype.onOpen = function () {
          * is likely because we have not got any saved, so we will subscribe the
          * client to some example topics
          */
-        this.Subscribe(['System', '#Cats', '#Dogs', '#ApacheHelicopters']);
+        this.Subscribe(['#Cats', '#Dogs', '#ApacheHelicopters']);
     }
 
     /**
@@ -180,12 +181,12 @@ SocketController.prototype.Subscribe = function (topic) {
     topic.forEach(function (e) {
         if (!ViewModel.isSubscribed(e)) {
             this.client.subscribe(this.getTopicURL(e), this.onBroadcast.bind(this));
-            if (e !== 'system') {
-                ViewModel.Subscribe(e);
-                this.saveChannel(e);
-            }
+            ViewModel.Subscribe(e);
+            this.saveChannel(e);
         }
     }.bind(this));
+
+    this.client.subscribe("/topic/system", this.onSystemBroadcast.bind(this));
 
     /**
      * Load previous messages on the subscribed channels that occured in the past
@@ -268,14 +269,34 @@ SocketController.prototype.getTopicURL = function (topic) {
  * @param {Array|String|Object} data
  * @returns {undefined}
  */
-SocketController.prototype.onBroadcast = function (data) {
-    var json = JSON.parse(data.body);
+SocketController.prototype.onBroadcast = function (json) {
+    var data = JSON.parse(json.body);
     ViewModel.addMessage({
-        fingerprint: json.fingerprint,
-        username: json.username,
-        message: json.message,
-        time: json.time
+        fingerprint: data.fingerprint,
+        username: data.username,
+        message: data.message,
+        time: data.time
     });
+}
+
+SocketController.prototype.onSystemBroadcast = function (json) {
+    var data = JSON.parse(json.body);
+    if (data.type.toUpperCase() === "CONNECTEDUSERS") {
+        var payload = JSON.parse(data.payload);
+
+        Object.keys(payload).forEach(function (e) {
+            var User = {
+                ID: e,
+                Name: payload[e]
+            }
+            console.log(User);
+            if (User.Name.length === 0) {
+                ViewModel.removeUser(User);
+            } else {
+                ViewModel.addUser(User);
+            }
+        }.bind(this));
+    }
 }
 
 /**
@@ -343,7 +364,7 @@ SocketController.prototype.restoreChannels = function () {
 
     if (ChannelStorage) {
         this.Subscribe(JSON.parse(ChannelStorage));
-        this.client.subscribe(this.getTopicURL('system'), this.onBroadcast.bind(this));
+        this.client.subscribe("/topic/system", this.onSystemBroadcast.bind(this));
 
         return true;
     }
