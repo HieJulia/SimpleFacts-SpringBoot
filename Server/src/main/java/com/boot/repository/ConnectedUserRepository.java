@@ -20,26 +20,60 @@ public class ConnectedUserRepository {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    /**
+     * Record a new session in the repository.
+     * The user of this session will default to Guest.
+     * 
+     * Implements: {@link #echoUser}
+     * 
+     * @param sessionID 
+     */
     public void add(String sessionID) {
         connectedUsers.put(sessionID, "Guest");
         this.echoUser(sessionID);
     }
 
+    /**
+     * Remove a session from the repository
+     * 
+     * Implements: {@link #echoUser}
+     * 
+     * @param sessionID 
+     */
     public void remove(String sessionID) {
         connectedUsers.put(sessionID, "");
         this.echoUser(sessionID);
         connectedUsers.remove(sessionID);
     }
 
+    /**
+     * returns a list of all connected users
+     * 
+     * @return connectedUsers
+     */
     public Hashtable<String, String> getUsers() {
         return connectedUsers;
     }
 
-    public void setUsername(String sessionID, String username) throws JsonProcessingException {
+    /**
+     * Sets a username to a specific session id
+     * 
+     * Implements: {@link #echoUser}
+     * 
+     * @param sessionID
+     * @param username
+     */
+    public void setUsername(String sessionID, String username) {
         connectedUsers.put(sessionID, username);
         this.echoUser(sessionID);
     }
 
+    /**
+     * Echos the selected sessionIDs recent name changes to everyone currently
+     * connected via websockets.
+     * 
+     * @param sessionID 
+     */
     private void echoUser(String sessionID) {
         try {
             Hashtable<String, String> user = new Hashtable<>();

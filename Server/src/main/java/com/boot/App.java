@@ -11,14 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableAutoConfiguration
 public class App implements CommandLineRunner {
-
-    @Autowired
-    RabbitTemplate rabbitTemplate;
     
     @Autowired
     Receiver receiver;
-    
-    final static String queueName = "spring-boot";
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);

@@ -3,7 +3,6 @@ package com.boot.event;
 import com.boot.repository.ConnectedUserRepository;
 import com.boot.util.EnvelopeUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
